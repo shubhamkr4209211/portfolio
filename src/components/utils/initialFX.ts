@@ -1,6 +1,55 @@
-import { SplitText } from "gsap-trial/SplitText";
 import gsap from "gsap";
 import { smoother } from "../Navbar";
+
+// SplitText shim — same API as gsap-trial/SplitText
+class SplitText {
+  chars: HTMLElement[] = [];
+  words: HTMLElement[] = [];
+  lines: HTMLElement[] = [];
+  private _originals: { el: HTMLElement; html: string }[] = [];
+
+  constructor(
+    selector: string | string[] | HTMLElement | HTMLElement[],
+    opts: { type?: string; linesClass?: string } = {}
+  ) {
+    const type = opts.type || "chars,words,lines";
+    const selectors = Array.isArray(selector) ? selector : [selector];
+
+    selectors.forEach((sel) => {
+      const elements: HTMLElement[] =
+        typeof sel === "string"
+          ? Array.from(document.querySelectorAll<HTMLElement>(sel))
+          : [sel as HTMLElement];
+
+      elements.forEach((el) => {
+        this._originals.push({ el, html: el.innerHTML });
+        el.innerHTML = "";
+
+        const text = el.innerText;
+
+        text.split("").forEach((char) => {
+          const charEl = document.createElement("span");
+          charEl.style.display = "inline-block";
+          charEl.textContent = char === " " ? "\u00a0" : char;
+          el.appendChild(charEl);
+          if (type.includes("chars")) this.chars.push(charEl);
+          if (type.includes("words")) this.words.push(charEl);
+        });
+
+        this.lines.push(el);
+      });
+    });
+  }
+
+  revert() {
+    this._originals.forEach(({ el, html }) => {
+      el.innerHTML = html;
+    });
+    this.chars = [];
+    this.words = [];
+    this.lines = [];
+  }
+}
 
 export function initialFX() {
   document.body.style.overflowY = "auto";
@@ -21,12 +70,11 @@ export function initialFX() {
   );
   gsap.fromTo(
     landingText.chars,
-    { opacity: 0, y: 80, filter: "blur(5px)" },
+    { opacity: 0, y: 80 },
     {
       opacity: 1,
       duration: 1.2,
-      filter: "blur(0px)",
-      ease: "power3.inOut",
+      ease: "power3.out",
       y: 0,
       stagger: 0.025,
       delay: 0.3,
@@ -38,12 +86,11 @@ export function initialFX() {
   var landingText2 = new SplitText(".landing-h2-info", TextProps);
   gsap.fromTo(
     landingText2.chars,
-    { opacity: 0, y: 80, filter: "blur(5px)" },
+    { opacity: 0, y: 80 },
     {
       opacity: 1,
       duration: 1.2,
-      filter: "blur(0px)",
-      ease: "power3.inOut",
+      ease: "power3.out",
       y: 0,
       stagger: 0.025,
       delay: 0.3,

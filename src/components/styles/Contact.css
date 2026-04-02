@@ -29,6 +29,11 @@
 a.contact-social {
   font-size: 25px;
   border-bottom: 1px solid #ccc;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  text-decoration: none;
 }
 .contact-box h2 {
   font-weight: 400;

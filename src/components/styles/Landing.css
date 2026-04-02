@@ -177,6 +177,17 @@
   line-height: 28px;
   font-weight: 500;
   font-family: "Geist", sans-serif;
+  background: linear-gradient(270deg, #fb8dff 0%, #a87cff 50%, #fb8dff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shineText 4s linear infinite;
+}
+@keyframes shineText {
+  to {
+    background-position: -200% center;
+  }
 }
 
 /* .landing-intro h1 span {
@@ -225,6 +236,7 @@ h2.landing-info-h2 {
   font-weight: 600;
   position: relative;
   margin-left: -5px;
+  text-shadow: 0px 0px 15px rgba(196, 129, 255, 0.5);
 }
 .landing-h2-2 {
   position: absolute;
